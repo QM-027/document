@@ -43,7 +43,7 @@
 
 <script>
 import { Back, Fold, Expand } from "@element-plus/icons-vue";
-import {getDocumentListByCode} from "@/api/document/index.js";
+import { getDocumentListByCode } from "@/api/document/index.js";
 
 export default {
   name: "Preview",
@@ -55,6 +55,7 @@ export default {
       activeKey: "",
       isCollapsed: false,
       contentRef: null,
+      screenWidth: window.innerWidth
     };
   },
   computed: {
@@ -66,31 +67,43 @@ export default {
     },
     currentMarkdown() {
       if (!this.dataList || !this.activeKey) return "";
-
       const item = this.dataList.find(i => i.id === this.activeKey);
       if (item && item.title) this.title = item.title;
-      if (item && item.content) return  item.content;
-
+      if (item && item.content) return item.content;
       return "";
     },
   },
   mounted() {
-    this.dataList = []
     const code = this.$route.query.code;
-    if(code) {
+    if (code) {
       getDocumentListByCode(code).then((res) => {
-        if (res && res.code === "0000") {
-          this.dataList = res.data
-        } else {
-          this.dataList = []
-        }
+        if (res && res.code === "0000" && res.data.length > 0) {
+          this.dataList = res.data;
+          if (this.dataList && this.dataList.length > 0) {
+            this.activeKey = this.dataList[0].id;
+            this.title = this.dataList[0].title;
+          }
 
-      })
+        } else {
+          this.dataList = [];
+        }
+      });
     } else {
-      this.$message({type: 'error', message: "获取数据失败"});
+      this.$message({ type: 'error', message: "获取数据失败" });
     }
+
+    // 根据屏幕宽度设置是否折叠
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+      this.isCollapsed = this.screenWidth <= 1024;
+    },
     goBack() {
       if (this.$router) {
         this.$router.go(-1);
@@ -98,7 +111,6 @@ export default {
     },
     selectItem(key) {
       this.activeKey = key;
-
       // 滚动到顶部
       this.$nextTick(() => {
         if (this.$refs.contentRef) {
@@ -161,16 +173,18 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;   /* 可以根据需要调整 */
+  width: 24px;
   height: 24px;
   cursor: pointer;
-  margin-right: 10px; /* 保持左边距 */
+  margin-right: 10px;
 }
 
 .nav-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;
+  max-height: calc(98vh - 60px);
 }
 
 .nav-list li {
@@ -205,7 +219,6 @@ export default {
   color: #3b50ab;
 }
 
-
 .content {
   flex: 1;
   padding: 20px;
@@ -219,5 +232,13 @@ export default {
   font-weight: bold;
   font-family: "Microsoft YaHei", "黑体", "SimHei", sans-serif;
   font-size: 20px;
+}
+
+/* 手机端和iPad折叠时保证导航栏最小宽度 */
+@media screen and (max-width: 1024px) {
+  .sidebar.is-collapsed {
+    width: 60px;
+    min-width: 60px;
+  }
 }
 </style>
