@@ -10,10 +10,18 @@ const routes = [
         meta: {title: '技术中心', icon: 'dashboard'}
     },
     {
-        path: '/save',
-        component: () => import('@/views/document/save/index.vue'),
-        hidden: true,
-        meta: {title: '文章编辑', icon: 'dashboard'}
+        path: '/404',
+        component: () => import('@/views/error/404.vue'),
+        hidden: true
+    },
+    {
+        path: '/401',
+        component: () => import('@/views/error/401.vue'),
+        hidden: true
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        component: () => import('@/views/error/404.vue'),
     },
     {
         path: '/preview',
@@ -27,6 +35,12 @@ const routes = [
         hidden: true,
         meta: {title: '反向齿轮', icon: 'dashboard'}
     },
+    // {
+    //     path: '/save',
+    //     component: () => import('@/views/document/save/index.vue'),
+    //     hidden: true,
+    //     meta: {title: '文章编辑', icon: 'dashboard'}
+    // },
     // {
     //     path: '/test',
     //     component: () => import('@/views/document/test/index.vue'),
@@ -42,7 +56,7 @@ const router = createRouter({
     routes
 });
 
-const defaultTitle = '资料中心'; // 定义一个默认标题
+const defaultTitle = '技术中心'; // 定义一个默认标题
 
 router.beforeEach((to, from, next) => {
     // 确保路由的 meta 信息中存在 title

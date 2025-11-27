@@ -66,7 +66,7 @@
 
       <!-- 按钮居中：保存 + 关闭 -->
       <div class="button-center">
-        <el-button round type="primary" @click="handleSubmit" :loading="loading">
+        <el-button round color="#626aef" @click="handleSubmit" :loading="loading">
           保存
         </el-button>
         <el-button round @click="handleClose">关闭</el-button>
@@ -148,7 +148,7 @@ export default {
     },
 
     handleClose() {
-      this.$router.push({ path: `/` });
+      this.$router.go(-1);
     },
     resetInfo(){
       this.form = {
