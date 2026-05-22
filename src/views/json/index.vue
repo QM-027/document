@@ -149,7 +149,7 @@ export default {
 
 /* placeholder */
 .json-editor:empty:before {
-  content: "点击检测按钮，或手动粘贴 JSON";
+  content: "请粘贴数据";
   color: #64748b;
 }
 

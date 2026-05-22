@@ -19,7 +19,31 @@ const service = axios.create({
 // 2. 请求拦截器 (Request Interceptors)
 service.interceptors.request.use(
     config => {
-        // 比如：在请求发送前，开启加载动画
+        // 防止重复提交
+        const requestObj = {
+            url: config.url,
+            data: JSON.stringify(config.data || ''),
+            time: new Date().getTime()
+        };
+
+        const sessionStr = sessionStorage.getItem('sessionObj');
+        const sessionObj = sessionStr ? JSON.parse(sessionStr) : {};
+
+        const interval = 3000; // 间隔时间(ms)，小于此时间视为重复提交
+
+        if (
+            sessionObj.data === requestObj.data &&
+            requestObj.time - sessionObj.time < interval &&
+            sessionObj.url === requestObj.url
+        ) {
+            const message = '数据正在处理，请勿重复提交';
+            console.warn(`[${requestObj.url}]: ` + message);
+            return Promise.reject(new Error(message));
+        } else {
+            sessionStorage.setItem('sessionObj', JSON.stringify(requestObj));
+        }
+
+        // 开启加载动画
         loadingInstance = ElLoading.service({
             lock: true,
             text: '加载中...',

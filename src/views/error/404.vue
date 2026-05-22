@@ -17,9 +17,13 @@
         <div class="bullshit__info">
           对不起，您正在寻找的页面不存在。尝试检查URL的错误，然后按浏览器上的刷新按钮或尝试在我们的应用程序中找到其他内容。
         </div>
-        <router-link to="/" class="bullshit__return-home">
-          返回首页
-        </router-link>
+        <ul class="list-unstyled">
+          <li class="link-type">
+            <router-link to="/">
+              回首页
+            </router-link>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -39,10 +43,11 @@ export default {
 
 <style lang="scss" scoped>
 .wscn-http404-container{
-  transform: translate(-50%,-50%);
-  position: absolute;
-  top: 40%;
-  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 40px 20px;
 }
 .wscn-http404 {
   position: relative;
@@ -226,6 +231,19 @@ export default {
       100% {
         transform: translateY(0);
         opacity: 1;
+      }
+    }
+  }
+  .list-unstyled {
+    font-size: 14px;
+    li {
+      padding-bottom: 5px;
+    }
+    a {
+      color: #008489;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }

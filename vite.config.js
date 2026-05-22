@@ -2,6 +2,7 @@
 
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import viteCompression from 'vite-plugin-compression';
 // 导入 Node.js 的 path 模块，用于处理路径别名
 import path from 'path';
 
@@ -20,6 +21,15 @@ export default defineConfig(({ mode }) => {
     // 插件配置：启用 Vue 3 单文件组件支持
     plugins: [
       vue(),
+      // Gzip 压缩
+      viteCompression({
+        cache: false,
+        algorithm: 'gzip',
+        ext: '.gz',
+        threshold: 10240, // 大于 10kb 才压缩
+        minRatio: 0.8,
+        deleteOriginalAssets: false,
+      }),
     ],
 
     // 路径解析配置：设置 @ 别名
@@ -29,6 +39,7 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, 'src')
       }
     },
+    productionSourceMap: false,
 
     // 开发服务器配置
     server: {

@@ -1,8 +1,5 @@
 <template>
   <div class="errPage-container">
-    <el-button icon="arrow-left" class="pan-back-btn" @click="back">
-      返回
-    </el-button>
     <el-row>
       <el-col :span="12">
         <h1 class="text-jumbo text-ginormous">
@@ -49,9 +46,11 @@ export default {
 
 <style lang="scss" scoped>
   .errPage-container {
-    width: 800px;
-    max-width: 100%;
-    margin: 100px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    padding: 40px 20px;
     .pan-back-btn {
       background: #008489;
       color: #fff;

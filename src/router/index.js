@@ -7,7 +7,12 @@ const routes = [
         name: 'Document',
         component: () => import('@/views/document/index.vue'),
         hidden: true,
-        meta: {title: '技术中心', icon: 'dashboard'}
+        meta: {title: '千梦大总管', icon: 'dashboard'}
+    },
+    {
+        path: '/waiting',
+        component: () => import('@/views/error/waiting.vue'),
+        hidden: true
     },
     {
         path: '/404',
@@ -27,13 +32,13 @@ const routes = [
         path: '/preview',
         component: () => import('@/views/document/preview/index.vue'),
         hidden: true,
-        meta: {title: '明细预览', icon: 'dashboard'}
+        meta: {title: '千梦大总管', icon: 'dashboard'}
     },
     {
         path: '/select',
         component: () => import('@/views/document/select/index.vue'),
         hidden: true,
-        meta: {title: '反向齿轮', icon: 'dashboard'}
+        meta: {title: '千梦大总管', icon: 'dashboard'}
     },
     // {
     //     path: '/save',
@@ -52,7 +57,7 @@ const routes = [
         path: '/json',
         component: () => import('@/views/json/index.vue'),
         hidden: true,
-        meta: {title: '测试', icon: 'dashboard'}
+        meta: {title: '千梦大总管', icon: 'dashboard'}
     },
 ];
 
@@ -63,7 +68,7 @@ const router = createRouter({
     routes
 });
 
-const defaultTitle = '技术中心'; // 定义一个默认标题
+const defaultTitle = '千梦大总管'; // 定义一个默认标题
 
 router.beforeEach((to, from, next) => {
     // 确保路由的 meta 信息中存在 title
