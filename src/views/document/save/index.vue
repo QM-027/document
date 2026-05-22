@@ -115,6 +115,11 @@ export default {
       this.resetInfo();
       // 获取分类数据
       this.fetchCategoryList()
+
+      // 清除校验
+      this.$nextTick(() => {
+        this.$refs.formRef.resetFields();
+      });
     },
     fetchCategoryList() {
       getDocument().then((res) => {

@@ -321,7 +321,6 @@ html, body {
 .app-item-card {
   flex: 0 0 calc(20% - 20px);
   margin-left: 20px;
-  margin-top: 20px;
   margin-bottom: 15px;
   max-width: 250px;
   min-width: 180px;
@@ -351,7 +350,6 @@ html, body {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 20px;
   box-sizing: border-box;
 }
 
@@ -447,7 +445,6 @@ html, body {
     /* 手机端 2 列布局 */
     flex: 0 0 calc(50% - 10px); /* 占据约 50% 宽度 */
     margin-left: 10px;
-    margin-top: 10px;
     margin-bottom: 10px;
     min-width: unset; /* 取消最小宽度限制 */
     height: 100px; /* 缩小卡片高度 */
@@ -492,7 +489,6 @@ html, body {
     /* 调整为 3 列 */
     flex: 0 0 calc(33.333% - 15px);
     margin-left: 15px;
-    margin-top: 15px;
     margin-bottom: 15px;
     min-width: 160px; /* 调整最小宽度 */
     height: 110px;

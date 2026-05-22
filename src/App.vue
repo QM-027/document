@@ -17,4 +17,8 @@ export default {
 <style>
 /* 全局样式 */
 
+.el-loading-mask {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(2px); /* 毛玻璃效果 */
+}
 </style>

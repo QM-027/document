@@ -39,7 +39,7 @@ const routes = [
     //     path: '/save',
     //     component: () => import('@/views/document/save/index.vue'),
     //     hidden: true,
-    //     meta: {title: '文章编辑', icon: 'dashboard'}
+    //     meta: {title: '文章保存', icon: 'dashboard'}
     // },
     // {
     //     path: '/test',
@@ -47,6 +47,13 @@ const routes = [
     //     hidden: true,
     //     meta: {title: '测试', icon: 'dashboard'}
     // },
+
+    {
+        path: '/json',
+        component: () => import('@/views/json/index.vue'),
+        hidden: true,
+        meta: {title: '测试', icon: 'dashboard'}
+    },
 ];
 
 // 2. 创建 Router 实例
