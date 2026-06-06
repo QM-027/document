@@ -59,6 +59,12 @@ const routes = [
         hidden: true,
         meta: {title: '千梦大总管', icon: 'dashboard'}
     },
+    {
+        path: '/verify',
+        component: () => import('@/views/verifyInfo/index.vue'),
+        hidden: true,
+        meta: {title: '知识验证', icon: 'dashboard'}
+    },
 ];
 
 // 2. 创建 Router 实例
