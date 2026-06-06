@@ -89,17 +89,6 @@
             {{ currentQuestion.question }}
           </div>
 
-          <div class="question-intent" @click="showIntent = !showIntent">
-            <div class="intent-header">
-              <i class="el-icon-view"></i>
-              <span>考察意图</span>
-              <i :class="showIntent ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-            </div>
-            <div class="intent-content" v-if="showIntent">
-              {{ currentQuestion.intent }}
-            </div>
-          </div>
-
           <!-- 查看答案按钮 (提交后隐藏) -->
           <div class="answer-hint-btn" @click="showAnswer = !showAnswer" v-if="!isVerified">
             <i :class="showAnswer ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>

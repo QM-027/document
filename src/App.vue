@@ -24,7 +24,7 @@ export default {
   computed: {
     showLayout() {
       const path = this.$route.path
-      return path !== '/404' && path !== '/401' && path !== '/waiting' && path !== '/verify'
+      return path !== '/404' && path !== '/401' && path !== '/waiting' && path !== '/verify' && path !== '/login'
     }
   }
 }

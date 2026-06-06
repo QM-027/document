@@ -1,23 +1,27 @@
 <template>
   <div class="page-header" :class="{ 'header-shadow': headerShadow }">
     <div class="welcome-message">
-      <img src="@/assets/svg/qm1.svg" alt="icon" class="header-icon"/>
-      <p class="greeting">千梦大总管</p>
+      <img src="@/assets/svg/qm1.svg" alt="icon" @click="$router.push('/')" class="header-icon"/>
+      <p class="greeting" @click="$router.push('/')">千梦大总管</p>
+      <span class="nav-link" @click="$router.push('/questionInfo')">问题回顾</span>
     </div>
 
-    <div class="dropdown-group">
+    <div class="header-right">
       <el-button v-if="showBack" type="text" class="back-btn" @click="goBack">
         返回
       </el-button>
       <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link">设置</span>
+        <div class="user-info">
+          <i class="el-icon-user user-avatar"><el-icon><UserFilled /></el-icon></i>
+          <span class="user-name">{{ nickname }}</span>
+        </div>
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="waiting">新增</el-dropdown-item>
             <el-dropdown-item command="waiting">开发</el-dropdown-item>
             <el-dropdown-item divided command="select">反向齿轮</el-dropdown-item>
             <el-dropdown-item command="json">JSON格式化</el-dropdown-item>
-            <el-dropdown-item command="questionInfo">问题回顾</el-dropdown-item>
+            <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -26,12 +30,15 @@
 </template>
 
 <script>
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft, UserFilled } from '@element-plus/icons-vue'
+import { logout } from '@/api/auth'
+import { removeToken, removeUser, getUser } from '@/utils/auth'
 
 export default {
   name: 'AppHeader',
   components: {
-    ArrowLeft
+    ArrowLeft,
+    UserFilled
   },
   props: {
     headerShadow: {
@@ -41,12 +48,37 @@ export default {
   },
   computed: {
     showBack() {
-      return this.$route.path !== '/'
+      return this.$route.path !== '/';
+    },
+    nickname() {
+      const user = getUser();
+      return user ? (user.nickname || user.email || '用户') : '用户';
     }
   },
   methods: {
-    handleCommand(command) {
-      this.$router.push({ path: `/${command}` });
+    async handleCommand(command) {
+      if (command === 'logout') {
+        try {
+          await this.$confirm('确定要退出登录吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          });
+        } catch (e) {
+          return; // 用户取消
+        }
+        try {
+          await logout();
+        } catch (e) {
+          // 即使接口失败也继续清除本地数据
+        }
+        removeToken();
+        removeUser();
+        this.$router.push('/login');
+        this.$message.success('退出成功');
+      } else {
+        this.$router.push({ path: `/${command}` });
+      }
     },
     goBack() {
       this.$router.push('/');
@@ -81,6 +113,7 @@ export default {
   align-items: center;
   padding: 10px 0;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .header-icon {
@@ -91,15 +124,33 @@ export default {
 
 .greeting {
   font-size: 1.7rem;
-  color: #2f5cf6;
   font-weight: bold;
   margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.dropdown-group {
+.nav-link {
+  font-size: 14px;
+  color: #606266;
+  cursor: pointer;
+  margin-left: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.header-right {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  gap: 12px;
 }
 
 .back-btn {
@@ -109,16 +160,34 @@ export default {
   color: #606165;
 }
 
-.el-dropdown-link {
-  outline: none !important;
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 1rem;
+  outline: none !important;
 }
 
-.el-dropdown-link:focus, .el-dropdown-link:active {
-  outline: none !important;
-  box-shadow: none !important;
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 768px) {

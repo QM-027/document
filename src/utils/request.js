@@ -3,6 +3,7 @@
 import axios from 'axios';
 // 从 Element Plus 导入组件，用于提示和加载
 import { ElMessage, ElLoading } from 'element-plus';
+import { getToken, removeToken, removeUser } from '@/utils/auth';
 
 // 读取环境变量文件 (.env.development / .env.production) 中的 VITE_APP_BASE_API
 const BASE_API = import.meta.env.VITE_APP_BASE_API;
@@ -19,28 +20,10 @@ const service = axios.create({
 // 2. 请求拦截器 (Request Interceptors)
 service.interceptors.request.use(
     config => {
-        // 防止重复提交
-        const requestObj = {
-            url: config.url,
-            data: JSON.stringify(config.data || ''),
-            time: new Date().getTime()
-        };
-
-        const sessionStr = sessionStorage.getItem('sessionObj');
-        const sessionObj = sessionStr ? JSON.parse(sessionStr) : {};
-
-        const interval = 3000; // 间隔时间(ms)，小于此时间视为重复提交
-
-        if (
-            sessionObj.data === requestObj.data &&
-            requestObj.time - sessionObj.time < interval &&
-            sessionObj.url === requestObj.url
-        ) {
-            const message = '数据正在处理，请勿重复提交';
-            console.warn(`[${requestObj.url}]: ` + message);
-            return Promise.reject(new Error(message));
-        } else {
-            sessionStorage.setItem('sessionObj', JSON.stringify(requestObj));
+        // 添加 Token 到请求头
+        const token = getToken();
+        if (token) {
+            config.headers['Authorization'] = 'Bearer ' + token;
         }
 
         // 开启加载动画
@@ -69,13 +52,13 @@ service.interceptors.response.use(
         const res = response.data;
 
         if (res.code && res.code !== "0000") {
-            // 非 200 状态码统一处理错误
+            // 非成功状态码统一处理错误
             ElMessage({
-                message: res.msg || '请求错误',
+                message: res.reason || res.msg || '请求错误',
                 type: 'error',
                 duration: 3 * 1000
             });
-            return Promise.reject(new Error(res.msg || 'Error'));
+            return Promise.reject(new Error(res.reason || res.msg || 'Error'));
         } else {
             // 成功请求，返回数据部分
             return res;
@@ -88,8 +71,15 @@ service.interceptors.response.use(
         // HTTP 状态码错误处理（4xx, 5xx等）
         let message = '请求失败，请检查网络或后端服务';
         if (error.response) {
-            // 根据 HTTP 状态码给予更具体的提示
-            message = `请求错误: ${error.response.status}`;
+            const status = error.response.status;
+            if (status === 401) {
+                // Token 失效，清除登录信息并跳转登录页
+                removeToken();
+                removeUser();
+                window.location.href = '/login';
+                return Promise.reject(error);
+            }
+            message = `请求错误: ${status}`;
         } else if (error.message.includes('timeout')) {
             message = '请求超时，请稍后重试';
         }

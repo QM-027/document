@@ -1,45 +1,63 @@
 <template>
-  <div class="page-wrapper">
-    <div class="page-main">
-      <div class="page-content">
-        <div class="content" ref="contentScroll">
-          <el-row :gutter="20" v-for="(data, index) in dataList" :key="index" class="data-section">
-            <el-col :span="24">
-              <div class="data-title-container">
-                <span class="title-indicator"></span>
-                <span class="data-title">{{ data.name }}</span>
+  <div class="document-page">
+    <!-- 左侧 2/3：卡片列表 -->
+    <div class="document-left" ref="contentScroll">
+      <div v-for="(data, index) in dataList" :key="index" class="section">
+        <div class="section-header">
+          <span class="section-indicator"></span>
+          <span class="section-title">{{ data.name }}</span>
+        </div>
+        <div class="card-list">
+          <div
+            class="card-item"
+            v-for="(group, groupIndex) in data.children"
+            :key="groupIndex"
+            @click="toSkip(group)"
+          >
+            <div class="card-top"></div>
+            <div class="card-body">
+              <div class="card-icon">{{ String.fromCharCode(65 + index) }}{{ groupIndex + 1 }}</div>
+              <div class="card-info">
+                <p class="card-name">{{ group.name }}</p>
+                <p class="card-remark">{{ group.remark }}</p>
               </div>
-            </el-col>
-            <el-col :span="24">
-              <div class="app-list-container">
-                <el-card
-                    class="app-item-card"
-                    shadow="hover"
-                    v-for="(group, groupIndex) in data.children"
-                    :key="groupIndex"
-                >
-                  <div class="app-card-content-wrapper" @click="toSkip(group)">
-                    <p class="app-name">{{ group.name }}</p>
-                    <p class="app-content">{{ group.remark }}</p>
-                  </div>
-                </el-card>
-              </div>
-            </el-col>
-          </el-row>
+              <i class="card-arrow el-icon-arrow-right"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- 右侧 1/3：明细文章列表 -->
+    <div class="document-right">
+<!--      <div class="right-header">-->
+<!--        <span class="right-title">日常记录</span>-->
+<!--      </div>-->
+      <div class="article-list">
+        <div
+          class="article-item"
+          v-for="(item, index) in articleList"
+          :key="index"
+          @click="openPreview(item)"
+        >
+          <span class="article-index">{{ index + 1 }}</span>
+          <span class="article-name">{{ item.name }}</span>
+          <i class="article-arrow el-icon-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import {getDocument} from "@/api/document/index.js";
-
+import { getDocument } from "@/api/document/index.js";
 export default {
   name: 'Document',
   data() {
     return {
       dataList: [],
+      articleList: []
     };
   },
   created() {
@@ -47,222 +65,459 @@ export default {
   },
   methods: {
     toSkip(item) {
-      if (!item.remark) return this.$message.warning("该分类下没有数据")
-      this.$router.push({path: `/preview`, query: {code: item.code}});
+      if (!item.remark) return this.$message.warning("该分类下没有数据");
+      this.$router.push({ path: '/preview', query: { code: item.code, name: item.name } });
+    },
+    openPreview(item) {
+      this.$router.push({ path: '/preview', query: { code: item.code, name: item.name } });
     },
     getList() {
-      getDocument().then((res) => {
+      getDocument().then(res => {
         if (res.code === "0000") {
-          this.dataList = res.data;
+          // 左侧：排除"日常记录"
+          this.dataList = res.data.filter(group => group.name !== '日常记录');
+          // 右侧：只取"日常记录"的 children
+          this.articleList = [];
+          const dailyGroup = res.data.find(group => group.name === '日常记录');
+          if (dailyGroup && dailyGroup.children) {
+            dailyGroup.children.forEach(child => {
+              this.articleList.push({
+                name: child.name,
+                code: child.code
+              });
+            });
+          }
         } else {
           this.dataList = [];
+          this.articleList = [];
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+<style scoped>
+@import '../../assets/fonts/font.css';
+
+.document-page {
+  height: 100vh;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.94);
+  display: flex;
+  background: #f0f2f5;
 }
 
-.page-main {
-  flex: 1 1 0%;
-  display: flex;
-  min-height: 0;
-  overflow: hidden;
-}
-
-
-.page-content {
-  flex: 1 1 0%;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.content {
-  flex: 1 1 0%;
-  min-height: 0;
+/* 左侧卡片区域 */
+.document-left {
+  flex: 2;
   overflow-y: auto;
-  padding: 24px 30px;
+  padding: 30px 30px 30px 40px;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.content::-webkit-scrollbar {
+.document-left::-webkit-scrollbar {
   display: none;
 }
 
-.data-section {
-  margin-bottom: 30px;
+.section {
+  margin-bottom: 32px;
 }
 
-.data-title-container {
+.section-header {
   display: flex;
   align-items: center;
-  padding: 10px 10px 10px 0;
-  background: transparent;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
-.title-indicator {
+.section-indicator {
   width: 4px;
-  height: 18px;
-  background: #409EFF;
+  height: 20px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
   border-radius: 2px;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
-.data-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #303133;
+  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-.app-list-container {
+.card-list {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -20px;
-  margin-top: 10px;
+  gap: 20px;
 }
 
-.app-item-card {
-  flex: 0 0 calc(20% - 20px);
-  margin-left: 20px;
-  margin-bottom: 15px;
-  max-width: 250px;
-  min-width: 180px;
-  height: 120px;
-  border-radius: 10px;
-  display: flex;
-  align-items: stretch;
+.card-item {
+  width: 260px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: all 0.3s;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.app-item-card:hover {
-  transform: scale(1.05);
-  box-shadow: 3px 3px 10px 1px rgba(169, 199, 231, 0.4);
+.card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.18);
 }
 
-.app-item-card /deep/ .el-card__body {
-  padding: 0 !important;
-  width: 100%;
-  height: 100%;
+.card-item:hover .card-top {
+  opacity: 1;
 }
 
-.app-card-content-wrapper {
+.card-item:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: #667eea;
+}
+
+.card-top {
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card-body {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 14px;
 }
 
-.app-name {
-  font-size: 16px;
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 15px;
   font-weight: 700;
-  color: #333;
+  color: #fff;
+  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #303133;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-shrink: 0;
+  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-.app-content {
-  font-size: 13px;
-  color: #888;
-  margin: 8px 0 0 0;
+.card-remark {
+  font-size: 12px;
+  color: #909399;
+  margin: 6px 0 0;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
 }
 
-/* ========================================= */
-/* --- APP/手机 适配 (max-width: 768px) --- */
-/* ========================================= */
-@media screen and (max-width: 768px) {
-  .page-main {
+.card-arrow {
+  font-size: 16px;
+  color: #c0c4cc;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+/* 右侧文章列表 */
+.document-right {
+  flex: 1;
+  min-width: 200px;
+  max-width: 220px;
+  border-left: 1px solid #e8ecf1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #f0f2f5;
+  flex-shrink: 0;
+}
+
+.right-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #303133;
+  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.article-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+}
+
+.article-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  gap: 12px;
+}
+
+.article-item:hover {
+  background: #f5f7fa;
+}
+
+.article-item:hover .article-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: #667eea;
+}
+
+.article-index {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  color: #667eea;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.article-name {
+  flex: 1;
+  font-size: 14px;
+  color: #303133;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.article-arrow {
+  font-size: 14px;
+  color: #c0c4cc;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+/* 华为 Mate 70 Pro (约 412px) */
+@media screen and (min-width: 360px) and (max-width: 480px) {
+  .document-page {
     flex-direction: column;
   }
 
-  .page-content {
-    flex: 1 1 0%;
-    width: 100%;
-    min-width: 100%;
-  }
-
-  .content {
+  .document-left {
+    flex: none;
+    height: 55vh;
     padding: 16px;
+    border-bottom: 1px solid #e8ecf1;
   }
 
-  .data-title {
-    font-size: 18px; /* 缩小章节标题字体 */
+  .document-right {
+    flex: none;
+    max-width: none;
+    min-width: auto;
+    height: 45vh;
+    border-left: none;
   }
 
-  .app-list-container {
-    margin-left: -10px; /* 调整负边距 */
-    justify-content: space-around; /* 均匀分布卡片 */
+  .section {
+    margin-bottom: 20px;
   }
 
-  .app-item-card {
-    /* 手机端 2 列布局 */
-    flex: 0 0 calc(50% - 10px); /* 占据约 50% 宽度 */
-    margin-left: 10px;
-    margin-bottom: 10px;
-    min-width: unset; /* 取消最小宽度限制 */
-    height: 100px; /* 缩小卡片高度 */
+  .section-title {
+    font-size: 16px;
   }
 
-  .app-name {
-    font-size: 15px;
+  .card-list {
+    gap: 12px;
   }
 
-  .app-content {
-    padding-top: 5px;
-    font-size: 12px;
-    -webkit-line-clamp: 2;
+  .card-item {
+    width: 100%;
+  }
+
+  .card-body {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .card-name {
+    font-size: 14px;
+  }
+
+  .card-remark {
+    font-size: 11px;
+  }
+
+  .article-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: #c0c4cc;
+  }
+
+  .right-header {
+    padding: 16px 16px 12px;
+  }
+
+  .right-title {
+    font-size: 16px;
+  }
+
+  .article-item {
+    padding: 12px 8px;
   }
 }
 
-
-/* ========================================================== */
-/* --- iPad/平板 适配 (769px - 1200px) --- */
-/* ========================================================== */
-@media screen and (min-width: 769px) and (max-width: 1200px) {
-  .content {
-    padding: 20px;
+/* iPad mini 7 竖屏 (约 744px) */
+@media screen and (min-width: 700px) and (max-width: 810px) {
+  .document-left {
+    padding: 20px 20px 20px 24px;
   }
 
-  .app-list-container {
-    margin-left: -15px; /* 调整负边距 */
+  .section-title {
+    font-size: 17px;
   }
 
-  .app-item-card {
-    /* 调整为 3 列 */
-    flex: 0 0 calc(33.333% - 15px);
-    margin-left: 15px;
-    margin-bottom: 15px;
-    min-width: 160px; /* 调整最小宽度 */
-    height: 110px;
+  .card-list {
+    gap: 14px;
+  }
+
+  .card-item {
+    width: calc(50% - 7px);
+  }
+
+  .card-body {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .card-name {
+    font-size: 14px;
+  }
+
+  .document-right {
+    max-width: 200px;
+    min-width: 180px;
+  }
+
+  .right-header {
+    padding: 20px 16px 12px;
+  }
+
+  .right-title {
+    font-size: 16px;
+  }
+
+  .article-item {
+    padding: 12px 10px;
+  }
+
+  .article-name {
+    font-size: 13px;
+  }
+}
+
+/* iPad mini 7 横屏 (约 1133px) */
+@media screen and (min-width: 1024px) and (max-width: 1200px) {
+  .document-left {
+    padding: 24px 24px 24px 30px;
+  }
+
+  .card-item {
+    width: calc(33.333% - 14px);
+  }
+
+  .card-list {
+    gap: 16px;
+  }
+}
+
+/* 通用小屏 (手机) */
+@media screen and (max-width: 359px) {
+  .document-page {
+    flex-direction: column;
+  }
+
+  .document-left {
+    flex: none;
+    height: 55vh;
+    padding: 12px;
+    border-bottom: 1px solid #e8ecf1;
+  }
+
+  .document-right {
+    flex: none;
+    max-width: none;
+    min-width: auto;
+    height: 45vh;
+    border-left: none;
+  }
+
+  .card-list {
+    gap: 10px;
+  }
+
+  .card-item {
+    width: 100%;
+  }
+
+  .card-body {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .card-name {
+    font-size: 13px;
+  }
+
+  .article-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: #c0c4cc;
   }
 }
 </style>

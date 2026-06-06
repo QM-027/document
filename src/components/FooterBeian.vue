@@ -1,14 +1,14 @@
 <template>
-  <div class="footer-beian">
-    <p class="beian-text">
-      版权所有：QianMeng
-      <span class="separator">|</span>
-      <img src="@/assets/beian.png" alt="备案" class="beian-icon" />
-      <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer" class="beian-link">
-        湘ICP备2026016513号
-      </a>
-    </p>
-  </div>
+<!--  <div class="footer-beian">-->
+<!--    <p class="beian-text">-->
+<!--      版权所有：QianMeng-->
+<!--      <span class="separator">|</span>-->
+<!--      <img src="@/assets/beian.png" alt="备案" class="beian-icon" />-->
+<!--      <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer" class="beian-link">-->
+<!--        湘ICP备2026016513号-->
+<!--      </a>-->
+<!--    </p>-->
+<!--  </div>-->
 </template>
 
 <script>

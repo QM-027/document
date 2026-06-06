@@ -47,15 +47,15 @@ export default defineConfig(({ mode }) => {
 
       // 代理配置 (仅在开发环境生效)
       proxy: {
-        // 动态使用环境变量 baseApi 作为代理的 key，例如 '/api'
-        [baseApi]: {
-          // 目标地址，即你的后端服务器地址
-          target: 'http://127.0.0.1:8578',
-
-          // 允许跨域
+        // 认证服务代理（端口 8579）
+        '/auth': {
+          target: 'http://127.0.0.1:8579',
           changeOrigin: true,
-
-          // 路径重写：将请求路径中的 '/api' 替换为空字符串
+        },
+        // 资料服务代理（端口 8578）
+        [baseApi]: {
+          target: 'http://127.0.0.1:8578',
+          changeOrigin: true,
           rewrite: (path) => path.replace(new RegExp(`^${baseApi}`), ''),
         },
       },

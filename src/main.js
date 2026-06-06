@@ -8,6 +8,7 @@ import 'element-plus/dist/index.css';
 
 import router from './router';
 import store from './store';
+import { getToken } from '@/utils/auth';
 
 import VMdEditor from '@kangc/v-md-editor'
 import '@kangc/v-md-editor/lib/style/base-editor.css'
@@ -48,6 +49,26 @@ app.use(VMdEditor)
 app.use(VMdPreview)
 
 
+// --- 路由守卫 ---
+const whiteList = ['/login', '/404', '/401', '/waiting'];
+
+router.beforeEach((to, from, next) => {
+  const hasToken = getToken();
+
+  if (hasToken) {
+    if (to.path === '/login') {
+      next({ path: '/' });
+    } else {
+      next();
+    }
+  } else {
+    if (whiteList.includes(to.path)) {
+      next();
+    } else {
+      next(`/login?redirect=${to.path}`);
+    }
+  }
+});
+
 // --- 挂载应用 ---
-// 确保在所有配置和插件注册完成后进行挂载
 app.mount('#app');

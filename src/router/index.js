@@ -10,6 +10,12 @@ const routes = [
         meta: {title: '千梦大总管', icon: 'dashboard'}
     },
     {
+        path: '/login',
+        component: () => import('@/views/login.vue'),
+        hidden: true,
+        meta: {title: '登录'}
+    },
+    {
         path: '/waiting',
         component: () => import('@/views/error/waiting.vue'),
         hidden: true
@@ -60,16 +66,10 @@ const routes = [
         meta: {title: '千梦大总管', icon: 'dashboard'}
     },
     {
-        path: '/verify',
-        component: () => import('@/views/verifyInfo/index.vue'),
-        hidden: true,
-        meta: {title: '知识验证', icon: 'dashboard'}
-    },
-    {
         path: '/questionInfo',
         component: () => import('@/views/questionInfo/index.vue'),
         hidden: true,
-        meta: {title: '知识点题目', icon: 'dashboard'}
+        meta: {title: '千梦大总管', icon: 'dashboard'}
     },
 ];
 

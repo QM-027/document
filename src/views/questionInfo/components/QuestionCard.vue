@@ -15,14 +15,6 @@
       <p class="question-text">{{ question.question }}</p>
     </div>
 
-    <div class="question-intent">
-      <div class="intent-label">
-        <i class="el-icon-info"></i>
-        <span>考察意图</span>
-      </div>
-      <p class="intent-text">{{ question.intent }}</p>
-    </div>
-
     <div class="question-key-points" v-if="showHints">
       <div class="key-points-label">
         <i class="el-icon-star-on"></i>
