@@ -100,15 +100,15 @@
             </div>
           </div>
 
-          <!-- 查看答案按钮 -->
-          <div class="answer-hint-btn" @click="showAnswer = !showAnswer">
+          <!-- 查看答案按钮 (提交后隐藏) -->
+          <div class="answer-hint-btn" @click="showAnswer = !showAnswer" v-if="!isVerified">
             <i :class="showAnswer ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
             <span>{{ showAnswer ? '收起参考' : '展开参考' }}</span>
           </div>
         </div>
 
-        <!-- 参考答案卡片 (查看答案后显示) -->
-        <div class="reference-card" v-if="showAnswer && currentQuestion">
+        <!-- 参考答案卡片 (查看答案后显示，提交后隐藏) -->
+        <div class="reference-card" v-if="showAnswer && currentQuestion && !isVerified">
           <div class="reference-section">
             <div class="section-title">
               <i class="el-icon-document"></i>
@@ -478,6 +478,8 @@ export default {
       // 累加当前题目用时到总用时
       this.totalTime += this.lastElapsedTime;
       this.isVerified = true;
+      // 提交后自动展开考察意图
+      this.showIntent = true;
     },
     handleReset() {
       this.isVerified = false;
