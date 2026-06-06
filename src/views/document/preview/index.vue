@@ -24,11 +24,23 @@
     </div>
 
     <div ref="contentRef" class="content" :class="{ 'content-full-width': isCollapsed }">
-      <div class="content-header">
-        <span class="content-title">{{ title }}</span>
-        <span class="create-time" v-if="createTime">创建时间：{{ createTime }}</span>
+      <template v-if="currentItem">
+        <div class="content-header">
+          <span class="content-title">{{ title }}</span>
+          <div class="header-sub" v-if="createTime || currentItem">
+            <span class="create-time" v-if="createTime">创建时间：{{ createTime }}</span>
+            <el-button size="small" type="text" class="edit-btn" @click="handleEdit">
+              <i class="el-icon-edit"></i> 编辑
+            </el-button>
+          </div>
+        </div>
+        <v-md-preview :text="currentMarkdown" />
+      </template>
+
+      <div v-else class="empty-tip">
+        <i class="el-icon-document"></i>
+        <span>暂无数据</span>
       </div>
-      <v-md-preview :text="currentMarkdown" />
 
       <!-- 底部上下条按钮 -->
       <div class="content-nav" v-if="isCollapsed">
@@ -61,15 +73,15 @@ export default {
     };
   },
   computed: {
+    currentItem() {
+      if (!this.dataList || !this.activeKey) return null;
+      return this.dataList.find(i => i.id === this.activeKey) || null;
+    },
     currentMarkdown() {
-      if (!this.dataList || !this.activeKey) return "";
-      const item = this.dataList.find(i => i.id === this.activeKey);
-      if (item) {
-        if (item.title) this.title = item.title;
-        this.createTime = item.create_time || '';
-        return item.content || '';
-      }
-      return "";
+      if (!this.currentItem) return "";
+      if (this.currentItem.title) this.title = this.currentItem.title;
+      this.createTime = this.currentItem.create_time || '';
+      return this.currentItem.content || '';
     },
     currentIndex() {
       return this.dataList.findIndex(i => i.id === this.activeKey);
@@ -128,6 +140,21 @@ export default {
       if (this.canNext) {
         this.selectItem(this.dataList[this.currentIndex + 1].id);
       }
+    },
+    handleEdit() {
+      if (!this.currentItem) return;
+      this.$router.push({
+        path: '/save',
+        query: {
+          id: this.currentItem.id,
+          title: this.currentItem.title,
+          category_code: this.currentItem.category_code || '',
+          title_sort: this.currentItem.title_sort || 0,
+          title_show: this.currentItem.title_show || '1',
+          content: this.currentItem.content || '',
+          create_time: this.currentItem.create_time || ''
+        }
+      });
     },
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed;
@@ -201,6 +228,22 @@ export default {
 
 .collapse-btn:hover {
   box-shadow: 0 4px 14px rgba(102, 126, 234, 0.55);
+}
+
+/* 空状态 */
+.empty-tip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: #c0c4cc;
+  font-size: 16px;
+}
+
+.empty-tip i {
+  font-size: 48px;
+  margin-bottom: 16px;
 }
 
 /* 底部上下条按钮 */
@@ -304,6 +347,8 @@ export default {
 .content-header {
   text-align: center;
   border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .content-title {
@@ -314,12 +359,26 @@ export default {
   font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
+.header-sub {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
 .create-time {
-  display: block;
-  text-align: right;
   font-size: 13px;
   color: #909399;
-  margin-top: 10px;
+}
+
+.edit-btn {
+  color: #667eea;
+  font-size: 13px;
+}
+
+.edit-btn:hover {
+  color: #764ba2;
 }
 
 /* 响应式 */

@@ -46,12 +46,12 @@ const routes = [
         hidden: true,
         meta: {title: '千梦大总管', icon: 'dashboard'}
     },
-    // {
-    //     path: '/save',
-    //     component: () => import('@/views/document/save/index.vue'),
-    //     hidden: true,
-    //     meta: {title: '文章保存', icon: 'dashboard'}
-    // },
+    {
+        path: '/save',
+        component: () => import('@/views/document/save/index.vue'),
+        hidden: true,
+        meta: {title: '文章保存', icon: 'dashboard'}
+    },
     // {
     //     path: '/test',
     //     component: () => import('@/views/document/test/index.vue'),
