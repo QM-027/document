@@ -1,0 +1,262 @@
+/* ================================
+   弹框富文本内容展示样式 richtext.css
+   ================================ */
+.custom-notice-dialog {
+
+  .el-dialog {
+    border-radius: 8px; /* 整体圆角 */
+    overflow: hidden; /* 确保内容在圆角内 */
+  }
+
+  .el-dialog__header {
+    padding: 0; /* 移除默认的头部 padding */
+  }
+
+  .el-dialog__body {
+    padding: 0; /* 移除默认的 body padding */
+  }
+
+  .el-dialog__footer {
+    padding: 15px 20px 15px; /* 调整底部 padding */
+    text-align: right;
+  }
+}
+
+/* 弹框头部公共样式 */
+.custom-dialog-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  background-color: #eef2ff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom: 1px solid #d9ecff;
+  color: #333;
+}
+
+.custom-dialog-header .header-content {
+  display: flex;
+  align-items: center;
+}
+
+.custom-dialog-header .header-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.custom-dialog-header .header-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #F4A460;
+}
+
+.dialog-content-area {
+  padding: 0 20px;
+  background-color: #fff;
+}
+
+
+
+
+
+/* ================================
+   富文本内容展示样式 richtext.css
+   ================================ */
+
+/* 通用容器 */
+.notice-content {
+  overflow-y: auto;
+  height: 85vh;
+  padding: 5px 20px;
+  background-color: #fff;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333;
+  font-family: "Microsoft YaHei", "宋体", Arial, sans-serif;
+
+  /* 隐藏滚动条 */
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.notice-content-dialog {
+  overflow-y: auto;
+  height: 70vh;
+  padding: 5px 20px;
+  background-color: #fff;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333;
+  font-family: "Microsoft YaHei", "宋体", Arial, sans-serif;
+
+  /* 隐藏滚动条 */
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* 段落 */
+.notice-content p {
+  margin: 10px 0;
+  text-indent: 2em;
+}
+
+/* 标题 */
+.notice-content h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 25px 0 15px;
+  padding-left: 12px;
+}
+.notice-content h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 22px 0 12px;
+  padding-left: 10px;
+}
+.notice-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 18px 0 10px;
+}
+
+/* 链接 */
+.notice-content a {
+  color: #00bfff;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+.notice-content a:hover {
+  color: #007acc;
+}
+
+/* 引用 */
+.notice-content blockquote {
+  border-left: 4px solid #00bfff;
+  background: #f8fbff;
+  color: #555;
+  padding: 10px 18px;
+  margin: 15px 0;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+/* 列表 */
+.notice-content ol,
+.notice-content ul {
+  padding-left: 2.5em;
+  margin: 10px 0;
+}
+.notice-content li {
+  margin: 6px 0;
+}
+
+/* 表格 */
+.notice-content table {
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  width: 100%;
+  margin: 15px 0;
+  table-layout: fixed;
+}
+.notice-content table td,
+.notice-content table th {
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  text-align: center;
+  word-break: break-word;
+}
+.notice-content table th {
+  background-color: #eef2ff;
+  font-weight: bold;
+  color: #333;
+}
+.notice-content table tr:nth-child(even) {
+  background-color: #fafcff;
+}
+
+/* 对齐类（quill 富文本生成的类） */
+.notice-content .ql-align-center,
+.notice-content .ql-align-center * {
+  text-align: center !important;
+}
+.notice-content .ql-align-right,
+.notice-content .ql-align-right * {
+  text-align: right !important;
+}
+.notice-content .ql-align-justify,
+.notice-content .ql-align-justify * {
+  text-align: justify !important;
+}
+
+/* 兼容内联样式（text-align） */
+.notice-content [style*="text-align:center"] {
+  text-align: center !important;
+}
+.notice-content [style*="text-align:right"] {
+  text-align: right !important;
+}
+.notice-content [style*="text-align:justify"] {
+  text-align: justify !important;
+}
+
+/* 图片与视频 */
+.notice-content img {
+  max-width: 100%;
+  display: block;
+  margin: 15px auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+.notice-content img:hover {
+  transform: scale(1.03);
+  cursor: zoom-in;
+}
+.notice-content video {
+  max-width: 100%;
+  display: block;
+  margin: 15px auto;
+  border-radius: 8px;
+}
+
+/* 代码与分割线 */
+.notice-content pre {
+  background: #f6f8fa;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: Consolas, Monaco, monospace;
+  overflow-x: auto;
+}
+.notice-content code {
+  background: #f0f2f5;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: Consolas, monospace;
+}
+
+/* 强调标题或居中加粗 */
+.notice-content .ql-align-center strong,
+.notice-content h1.ql-align-center,
+.notice-content h2.ql-align-center {
+  font-weight: 800;
+}

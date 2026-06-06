@@ -17,7 +17,7 @@
             <el-dropdown-item command="waiting">开发</el-dropdown-item>
             <el-dropdown-item divided command="select">反向齿轮</el-dropdown-item>
             <el-dropdown-item command="json">JSON格式化</el-dropdown-item>
-            <el-dropdown-item command="verify">知识点自测</el-dropdown-item>
+            <el-dropdown-item command="questionInfo">问题回顾</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

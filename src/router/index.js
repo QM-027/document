@@ -65,6 +65,12 @@ const routes = [
         hidden: true,
         meta: {title: '知识验证', icon: 'dashboard'}
     },
+    {
+        path: '/questionInfo',
+        component: () => import('@/views/questionInfo/index.vue'),
+        hidden: true,
+        meta: {title: '知识点题目', icon: 'dashboard'}
+    },
 ];
 
 // 2. 创建 Router 实例
