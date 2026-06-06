@@ -17,8 +17,7 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="waiting">新增</el-dropdown-item>
-            <el-dropdown-item command="waiting">开发</el-dropdown-item>
+            <el-dropdown-item command="save">新增</el-dropdown-item>
             <el-dropdown-item divided command="select">反向齿轮</el-dropdown-item>
             <el-dropdown-item command="json">JSON格式化</el-dropdown-item>
             <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
