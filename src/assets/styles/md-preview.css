@@ -3,9 +3,24 @@
   font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif !important;
   font-size: 14px;
   line-height: 1.8;
-  color: #333;
+  color: #333333;
 }
 
+/* Drake 主题变量 */
+:root {
+  --drake-accent: #e95f59;
+  --drake-highlight: #d63200;
+  --title-color: #273849;
+  --blockquote-bg-color: #fdefee;
+  --blockquote-border-color: #e95f59;
+  --code-block-bg-color: #2b2b2b;
+  --code-block-color: #A9B7C6;
+  --table-border-color: #dfe2e5;
+  --table-header-bg-color: #f8f8f8;
+  --table-n2-bg-color: #f8f8f8;
+}
+
+/* 标题样式 */
 .v-md-preview h1,
 .v-md-preview h2,
 .v-md-preview h3,
@@ -13,88 +28,107 @@
 .v-md-preview h5,
 .v-md-preview h6 {
   font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
-  color: #1a1a1a;
-  margin-top: 1.5em;
-  margin-bottom: 0.8em;
+  color: var(--title-color);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   font-weight: bold;
+  line-height: 1.4;
 }
 
 .v-md-preview h1 {
-  font-size: 1.8em;
-  border-bottom: 2px solid #eee;
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 0;
+  border-bottom: 2px solid var(--table-border-color);
   padding-bottom: 0.3em;
 }
 
 .v-md-preview h2 {
-  font-size: 1.5em;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.2em;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--title-color);
+  padding-bottom: 0.3em;
 }
 
 .v-md-preview h3 {
-  font-size: 1.3em;
+  font-size: 1.4rem;
 }
 
 .v-md-preview h4 {
-  font-size: 1.1em;
+  font-size: 1.2rem;
 }
 
+.v-md-preview h5 {
+  font-size: 1rem;
+}
+
+.v-md-preview h6 {
+  font-size: 1rem;
+}
+
+/* 段落 */
 .v-md-preview p {
   margin-bottom: 0.8em;
   line-height: 1.8;
 }
 
+/* 链接 */
 .v-md-preview a {
-  color: #3b50ab;
+  color: var(--drake-highlight);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-bottom-color 0.2s;
 }
 
 .v-md-preview a:hover {
-  border-bottom-color: #3b50ab;
+  border-bottom-color: var(--drake-highlight);
 }
 
+/* 引用块 - Drake 风格 */
 .v-md-preview blockquote {
-  border-left: 4px solid #8facf1;
-  padding: 10px 20px;
+  border-left: 4px solid var(--blockquote-border-color);
+  padding: 10px 16px;
   margin: 1em 0;
-  background: #f8f9fc;
-  color: #555;
-  border-radius: 0 4px 4px 0;
+  background-color: var(--blockquote-bg-color);
+  color: #333333;
+  border-radius: 2px;
+  position: relative;
 }
 
 .v-md-preview blockquote p {
   margin-bottom: 0;
 }
 
+/* 内联代码 */
 .v-md-preview code {
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Menlo, monospace;
   background: #f0f2f5;
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 0.9em;
-  color: #c7254e;
+  color: var(--drake-highlight);
 }
 
+/* 代码块 - Drake 深色风格 */
 .v-md-preview pre {
-  background: #1e1e2e;
-  border-radius: 8px;
+  background-color: var(--code-block-bg-color);
+  border-radius: 2px;
   padding: 16px 20px;
   overflow-x: auto;
   margin: 1em 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .v-md-preview pre code {
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Menlo, monospace;
   background: transparent;
-  color: #cdd6f4;
+  color: var(--code-block-color);
   padding: 0;
   font-size: 13px;
   line-height: 1.6;
 }
 
+/* 列表 */
 .v-md-preview ul,
 .v-md-preview ol {
   padding-left: 2em;
@@ -111,47 +145,112 @@
   margin-bottom: 0;
 }
 
+/* 表格 - Drake 风格 */
 .v-md-preview table {
   width: 100%;
   border-collapse: collapse;
   margin: 1em 0;
   font-size: 0.95em;
+  background-color: #ffffff;
+}
+
+.v-md-preview thead {
+  background-color: var(--table-header-bg-color);
 }
 
 .v-md-preview thead th {
-  background: #f6f6f7;
   font-weight: bold;
   text-align: left;
+  border: 1px solid var(--table-border-color);
+  border-bottom: 0;
+  padding: 6px 13px;
 }
 
 .v-md-preview th,
 .v-md-preview td {
-  border: 1px solid #e0e0e0;
-  padding: 10px 14px;
+  border: 1px solid var(--table-border-color);
+  padding: 6px 13px;
+}
+
+.v-md-preview tbody tr:nth-child(2n) {
+  background-color: var(--table-n2-bg-color);
 }
 
 .v-md-preview tbody tr:hover {
-  background: #f8f9fc;
+  background-color: #fdefee;
 }
 
+/* 图片 */
 .v-md-preview img {
   max-width: 100%;
-  border-radius: 6px;
+  border-radius: 2px;
   margin: 1em 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  vertical-align: baseline;
 }
 
+/* 分割线 */
 .v-md-preview hr {
-  border: none;
-  border-top: 1px solid #eee;
-  margin: 2em 0;
+  height: 2px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: var(--title-color);
+  border: 0 none;
+  overflow: hidden;
+  box-sizing: content-box;
 }
 
+/* 强调 */
 .v-md-preview strong {
   font-weight: bold;
-  color: #1a1a1a;
+  color: var(--title-color);
 }
 
 .v-md-preview em {
   font-style: italic;
+  padding: 0 5px 0 2px;
+}
+
+/* 删除线 */
+.v-md-preview del {
+  padding: 1px 2px;
+}
+
+/* 高亮标记 */
+.v-md-preview mark {
+  border: 1px solid var(--drake-highlight);
+  color: var(--drake-highlight);
+  background-color: transparent;
+  padding: 0.1rem 0.5rem;
+  border-radius: 2rem;
+  margin: 0 0.2rem;
+  font-size: 0.95rem;
+}
+
+/* 键盘快捷键 */
+.v-md-preview kbd {
+  border: 1px solid #5b5b5e;
+  background: transparent;
+  color: #333333;
+  margin: 0 0.4rem;
+  font-family: "JetBrains Mono", monospace !important;
+  font-size: 0.95rem;
+  padding: 0.3em 0.4em;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3);
+}
+
+/* 复选框 */
+.v-md-preview input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: var(--drake-accent);
+}
+
+/* 任务列表 */
+.v-md-preview .task-list-item {
+  list-style: none;
+  margin-left: -1.5em;
+}
+
+.v-md-preview .task-list-item input {
+  margin-right: 0.5em;
 }

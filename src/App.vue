@@ -3,18 +3,19 @@
     <AppHeader v-if="showLayout" :header-shadow="headerShadow" />
     <router-view :class="{ 'main-content': showLayout }" />
     <FooterBeian v-if="showLayout" />
+    <FloatingBackButton />
   </div>
 </template>
 
 <script>
 import AppHeader from '@/components/AppHeader.vue'
-import FooterBeian from '@/components/FooterBeian.vue'
+import FloatingBackButton from '@/components/FloatingBackButton.vue'
 
 export default {
   name: 'App',
   components: {
     AppHeader,
-    FooterBeian
+    FloatingBackButton
   },
   data() {
     return {

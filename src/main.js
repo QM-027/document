@@ -50,7 +50,7 @@ app.use(VMdPreview)
 
 
 // --- 路由守卫 ---
-const whiteList = ['/login', '/404', '/401', '/waiting'];
+const whiteList = ['/', '/preview', '/login', '/404', '/401', '/waiting'];
 
 router.beforeEach((to, from, next) => {
   const hasToken = getToken();

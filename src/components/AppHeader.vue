@@ -3,14 +3,10 @@
     <div class="welcome-message">
       <img src="@/assets/svg/qm1.svg" alt="icon" @click="$router.push('/')" class="header-icon"/>
       <p class="greeting" @click="$router.push('/')">千梦大总管</p>
-      <span class="nav-link" @click="$router.push('/questionInfo')">问题回顾</span>
     </div>
 
     <div class="header-right">
-      <el-button v-if="showBack" type="text" class="back-btn" @click="goBack">
-        返回
-      </el-button>
-      <el-dropdown @command="handleCommand">
+      <el-dropdown @command="handleCommand" v-if="nickname">
         <div class="user-info">
           <i class="el-icon-user user-avatar"><el-icon><UserFilled /></el-icon></i>
           <span class="user-name">{{ nickname }}</span>
@@ -18,25 +14,26 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item command="save">新增</el-dropdown-item>
-            <el-dropdown-item divided command="select">反向齿轮</el-dropdown-item>
-            <el-dropdown-item command="json">JSON格式化</el-dropdown-item>
             <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+
+      <div class="user-info" v-else>
+        <el-button @click="$router.push('/login')">登录</el-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ArrowLeft, UserFilled } from '@element-plus/icons-vue'
+import { UserFilled } from '@element-plus/icons-vue'
 import { logout } from '@/api/auth'
 import { removeToken, removeUser, getUser } from '@/utils/auth'
 
 export default {
   name: 'AppHeader',
   components: {
-    ArrowLeft,
     UserFilled
   },
   props: {
@@ -46,12 +43,9 @@ export default {
     }
   },
   computed: {
-    showBack() {
-      return this.$route.path !== '/';
-    },
     nickname() {
       const user = getUser();
-      return user ? (user.nickname || user.email || '用户') : '用户';
+      return user ? (user.nickname || user.email) : '';
     }
   },
   methods: {
@@ -78,9 +72,6 @@ export default {
       } else {
         this.$router.push({ path: `/${command}` });
       }
-    },
-    goBack() {
-      this.$router.push('/');
     }
   }
 }
@@ -150,13 +141,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.back-btn {
-  margin-right: 16px;
-  font-weight: 500;
-  font-size: 1rem;
-  color: #606165;
 }
 
 .user-info {
