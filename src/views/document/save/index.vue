@@ -85,6 +85,7 @@
 import { debounceSubmit } from "@/utils/debounceSubmit.js";
 import { getDocument, saveDocument } from "@/api/document/index.js";
 import { getUser } from "@/utils/auth";
+import {useItemStore} from "../../../utils/item.js";
 
 export default {
   name: "Save",
@@ -124,28 +125,25 @@ export default {
     handleOpen() {
       this.resetInfo();
       this.fetchCategoryList();
-      // 从路由参数中读取编辑数据
-      const query = this.$route.query;
-      if (query.title) {
-        // 编辑模式：必须有 id
-        if (!query.id) {
-          this.$message.warning('缺少文章ID，无法编辑');
-          this.$router.go(-1);
-          return;
-        }
+
+
+      const itemStore = useItemStore()
+      const item = itemStore.currentItem
+      if (item && item.id) {
         this.form = {
-          id: query.id,
-          title: query.title || '',
-          category_code: query.category_code || '',
-          title_sort: Number(query.title_sort) || 0,
-          title_show: query.title_show || '1',
-          content: query.content || '',
-          create_time: query.create_time || ''
+          id: item.id,
+          title: item.title || '',
+          category_code: item.category_code || '',
+          title_sort: Number(item.title_sort) || 0,
+          title_show: item.title_show || '1',
+          content: item.content || '',
+          create_time: item.create_time || ''
         };
+      } else {
+        this.$nextTick(() => {
+          this.$refs.formRef.resetFields();
+        });
       }
-      this.$nextTick(() => {
-        this.$refs.formRef.resetFields();
-      });
     },
     fetchCategoryList() {
       getDocument().then(res => {

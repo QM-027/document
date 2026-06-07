@@ -29,7 +29,8 @@ export default {
       functions: [
         { name: '问题回顾', desc: '修复问题工具', route: '/questionInfo' },
         { name: '反向齿轮', desc: '逆向分析工具', route: '/select' },
-        { name: '数据处理', desc: '清洗数据工具', route: '/json' }
+        { name: '数据处理', desc: '清洗数据工具', route: '/json' },
+        { name: '动图分析', desc: '动画解析工具', route: '/gifInfo' },
       ]
     }
   },

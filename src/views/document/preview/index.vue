@@ -30,7 +30,7 @@
           <div class="header-sub" v-if="createTime || currentItem">
             <span class="create-time" v-if="createTime">{{ createTime }}</span>
             <el-button v-show="isAdmin" size="small" type="text" class="edit-btn" @click="handleEdit">
-              <i class="el-icon-edit"></i> 编辑
+              <el-icon><Edit /></el-icon>
             </el-button>
           </div>
         </div>
@@ -96,10 +96,12 @@ import '@/assets/styles/drake-theme.css';
 import '@/assets/styles/md-preview.css';
 import FooterBeian from "@/components/FooterBeian/index.vue";
 import {getUser} from "../../../utils/auth.js";
+import { Edit } from '@element-plus/icons-vue';
+import {useItemStore} from "../../../utils/item.js";
 
 export default {
   name: "Preview",
-  components: {FooterBeian, MarkdownPreview },
+  components: {FooterBeian, MarkdownPreview, Edit },
   data() {
     return {
       dataList: [],
@@ -130,7 +132,8 @@ export default {
   computed: {
     isAdmin() {
       const user = getUser();
-      return user && user.id == 1 && user.username === 'admin';
+      console.log('user', user);
+      return user && user.userId === 1 && user.username === 'admin';
     },
     currentItem() {
       if (!this.dataList || !this.activeKey) return null;
@@ -224,19 +227,11 @@ export default {
       }
     },
     handleEdit() {
-      if (!this.currentItem) return;
-      this.$router.push({
-        path: '/save',
-        query: {
-          id: this.currentItem.id,
-          title: this.currentItem.title,
-          category_code: this.currentItem.category_code || '',
-          title_sort: this.currentItem.title_sort || 0,
-          title_show: this.currentItem.title_show || '1',
-          content: this.currentItem.content || '',
-          create_time: this.currentItem.create_time || ''
-        }
-      });
+      if (!this.currentItem || !this.currentItem.id) return this.$message.warning('数据不完整，无法编辑');
+
+      const itemStore = useItemStore()
+      itemStore.setItem(this.currentItem)
+      this.$router.push('/save')
     },
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed;

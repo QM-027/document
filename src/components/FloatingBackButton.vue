@@ -118,7 +118,11 @@ export default {
       }
     },
     goBack() {
-      this.$router.go(-1);
+      if (window.history.length > 1) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push('/');
+      }
     },
     addDragListeners() {
       document.addEventListener('mousemove', this.onDrag)

@@ -71,6 +71,12 @@ const routes = [
         hidden: true,
         meta: {title: '千梦大总管', icon: 'dashboard'}
     },
+    {
+        path: '/gifInfo',
+        component: () => import('@/views/gifInfo/index.vue'),
+        hidden: true,
+        meta: {title: '千梦大总管', icon: 'dashboard'}
+    },
 ];
 
 // 2. 创建 Router 实例

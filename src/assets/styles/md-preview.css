@@ -199,15 +199,28 @@
   box-sizing: content-box;
 }
 
-/* 强调 */
-.v-md-preview strong {
-  font-weight: bold;
+/* 强调 - 加粗 */
+.v-md-preview strong,
+.v-md-preview b {
+  font-weight: 700;
   color: var(--title-color);
+  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
-.v-md-preview em {
+/* 斜体 */
+.v-md-preview em,
+.v-md-preview i {
   font-style: italic;
   padding: 0 5px 0 2px;
+  color: #555;
+}
+
+/* 加粗斜体 */
+.v-md-preview strong em,
+.v-md-preview em strong {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--drake-highlight);
 }
 
 /* 删除线 */

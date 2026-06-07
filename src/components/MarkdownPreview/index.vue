@@ -54,10 +54,54 @@ const renderer = {
   link({ href, title, text }) {
     const t = title ? ` title="${title}"` : '';
     return `<a href="${href}"${t}>${text}</a>`;
+  },
+  strong({ text }) {
+    return `<strong>${text}</strong>`;
+  },
+  em({ text }) {
+    return `<em>${text}</em>`;
   }
 };
 
-marked.use({ renderer, gfm: true, breaks: false });
+// 自定义扩展以更好地支持中文加粗
+const chineseBoldExtension = {
+  name: 'chineseBold',
+  level: 'inline',
+  start(src) {
+    // 查找可能的加粗开始位置
+    const match = src.match(/\*\*/)
+    return match ? match.index : -1
+  },
+  tokenizer(src) {
+    // 匹配中文加粗，支持中英文混合
+    const match = src.match(/^\*\*([\s\S]+?)\*\*(?!\*)/)
+    if (match) {
+      return {
+        type: 'strong',
+        raw: match[0],
+        text: match[1].trim()
+      }
+    }
+    return false
+  }
+}
+
+// 自定义 hooks 来处理加粗文本
+const hooks = {
+  preprocess(src) {
+    // 在预处理阶段，将 **文本** 替换为 HTML 标签
+    return src.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
+  }
+}
+
+marked.use({
+  renderer,
+  gfm: true,
+  breaks: false,
+  extensions: [chineseBoldExtension],
+  hooks
+});
 
 export default {
   name: 'MarkdownPreview',
@@ -67,7 +111,10 @@ export default {
   computed: {
     renderedHtml() {
       if (!this.text) return '';
-      return marked(this.text);
+      const result = marked(this.text);
+      console.log('[MarkdownPreview] Input:', this.text.substring(0, 100));
+      console.log('[MarkdownPreview] Output:', result.substring(0, 200));
+      return result;
     }
   }
 };
