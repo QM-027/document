@@ -61,17 +61,8 @@
       </div>
     </div>
 
-    <!-- 底部备案 -->
-    <div class="login-footer">
-      <p class="beian-text">
-        版权所有：©2025-2026 QianMeng
-        <span class="separator">|</span>
-        <img src="@/assets/beian.png" alt="备案" class="beian-icon" />
-        <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener noreferrer" class="beian-link">
-          湘ICP备2026016513号
-        </a>
-      </p>
-    </div>
+    <!-- 备案信息 -->
+    <footer-beian />
   </div>
 </template>
 
@@ -79,10 +70,12 @@
 import { Message, Key } from '@element-plus/icons-vue';
 import { sendEmailCode, emailLogin } from '@/api/auth';
 import { setToken, setUser } from '@/utils/auth';
+import FooterBeian from "../components/FooterBeian/index.vue";
 
 export default {
   name: 'Login',
   components: {
+    FooterBeian,
     Message,
     Key
   },
@@ -202,6 +195,7 @@ export default {
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  margin-bottom: 25vh;
 }
 
 .login-header {

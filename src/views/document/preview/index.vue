@@ -28,13 +28,13 @@
         <div class="content-header">
           <span class="content-title">{{ title }}</span>
           <div class="header-sub" v-if="createTime || currentItem">
-            <span class="create-time" v-if="createTime">创建时间：{{ createTime }}</span>
-            <el-button size="small" type="text" class="edit-btn" @click="handleEdit">
+            <span class="create-time" v-if="createTime">{{ createTime }}</span>
+            <el-button v-show="isAdmin" size="small" type="text" class="edit-btn" @click="handleEdit">
               <i class="el-icon-edit"></i> 编辑
             </el-button>
           </div>
         </div>
-        <v-md-preview :text="currentMarkdown" />
+        <markdown-preview :text="currentMarkdown" />
       </template>
 
       <div v-else class="empty-tip">
@@ -43,13 +43,47 @@
       </div>
 
       <!-- 底部上下条按钮 -->
-      <div class="content-nav" v-if="isCollapsed">
+      <div class="content-nav">
         <el-button @click="prevItem" :disabled="!canPrev" plain class="nav-btn">
           <i class="el-icon-arrow-left"></i> 上一条
         </el-button>
+        <div class="word-count">
+          <span>{{ charCount }} 字</span>
+          <span class="word-count-divider">|</span>
+          <span>{{ wordCount }} 词</span>
+        </div>
         <el-button @click="nextItem" :disabled="!canNext" plain class="nav-btn">
           下一条 <i class="el-icon-arrow-right"></i>
         </el-button>
+      </div>
+
+      <!-- 备案信息 -->
+      <footer-beian />
+
+
+
+      <!-- 主题选择 -->
+      <div class="theme-selector">
+        <el-dropdown @command="handleThemeChange" placement="top-end">
+          <div class="theme-btn">
+            <i class="el-icon-brush"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path d="M864 128H416c-17.7 0-32 14.3-32 32v128H160c-17.7 0-32 14.3-32 32v448c0 17.7 14.3 32 32 32h448c17.7 0 32-14.3 32-32V576h224c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32zM576 736H192V416h384v320zm224-224H608V192h192v320z" fill="currentColor"/><path d="M672 288a48 48 0 1 0 96 0 48 48 0 1 0-96 0zM512 480a48 48 0 1 0 96 0 48 48 0 1 0-96 0zM352 352a48 48 0 1 0 96 0 48 48 0 1 0-96 0z" fill="currentColor"/></svg></i>
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="theme in themeList"
+                :key="theme.value"
+                :command="theme.value"
+                :class="{ 'is-active': currentTheme === theme.value }"
+              >
+                <span class="theme-item">
+                  <span class="theme-dot" :style="{ background: theme.color }"></span>
+                  {{ theme.label }}
+                </span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </div>
@@ -57,9 +91,15 @@
 
 <script>
 import { getDocumentListByCode } from "@/api/document/index.js";
+import MarkdownPreview from "@/components/MarkdownPreview/index.vue";
+import '@/assets/styles/drake-theme.css';
+import '@/assets/styles/md-preview.css';
+import FooterBeian from "@/components/FooterBeian/index.vue";
+import {getUser} from "../../../utils/auth.js";
 
 export default {
   name: "Preview",
+  components: {FooterBeian, MarkdownPreview },
   data() {
     return {
       dataList: [],
@@ -69,10 +109,29 @@ export default {
       activeKey: "",
       isCollapsed: false,
       contentRef: null,
-      screenWidth: window.innerWidth
+      screenWidth: window.innerWidth,
+      currentTheme: 'drake',
+      themeList: [
+        { label: 'Drake 默认', value: 'drake', color: '#e95f59' },
+        { label: 'Drake Ayu', value: 'drake-ayu', color: '#f07178' },
+        { label: 'Drake Black', value: 'drake-black', color: '#6ca0dc' },
+        { label: 'Drake Dark', value: 'drake-dark', color: '#3473b0' },
+        { label: 'Drake Google', value: 'drake-google', color: '#4285f4' },
+        { label: 'Drake JB', value: 'drake-jb', color: '#667eea' },
+        { label: 'Drake 掘金', value: 'drake-juejin', color: '#1e80ff' },
+        { label: 'Drake Light', value: 'drake-light', color: '#4b83f0' },
+        { label: 'Drake Material', value: 'drake-material', color: '#e91e63' },
+        { label: 'Drake Purple', value: 'drake-purple', color: '#9c27b0' },
+        { label: 'Drake Vue', value: 'drake-vue', color: '#42b883' },
+        { label: 'Drake Vue3', value: 'drake-vue3', color: '#42d392' }
+      ]
     };
   },
   computed: {
+    isAdmin() {
+      const user = getUser();
+      return user && user.id == 1 && user.username === 'admin';
+    },
     currentItem() {
       if (!this.dataList || !this.activeKey) return null;
       return this.dataList.find(i => i.id === this.activeKey) || null;
@@ -91,6 +150,26 @@ export default {
     },
     canNext() {
       return this.currentIndex < this.dataList.length - 1;
+    },
+    charCount() {
+      if (!this.currentMarkdown) return 0;
+      // 去除 markdown 语法标记后的纯文本字符数
+      return this.currentMarkdown
+        .replace(/[#*`~\[\]()!>|\-_{}]/g, '')
+        .replace(/\s+/g, '')
+        .length;
+    },
+    wordCount() {
+      if (!this.currentMarkdown) return 0;
+      // 中文按字数，英文按单词数
+      const text = this.currentMarkdown
+        .replace(/[#*`~\[\]()!>|\-_{}]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      // 匹配中文字符 + 英文单词
+      const cn = (text.match(/[一-龥]/g) || []).length;
+      const en = (text.match(/[a-zA-Z]+/g) || []).length;
+      return cn + en;
     }
   },
   mounted() {
@@ -114,6 +193,9 @@ export default {
 
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+
+    // 初始化主题
+    this.initTheme();
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -158,14 +240,30 @@ export default {
     },
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed;
+    },
+    initTheme() {
+      const savedTheme = localStorage.getItem('drake-theme');
+      if (savedTheme && this.themeList.some(t => t.value === savedTheme)) {
+        this.currentTheme = savedTheme;
+      }
+      this.applyTheme(this.currentTheme);
+    },
+    handleThemeChange(theme) {
+      this.applyTheme(theme);
+      localStorage.setItem('drake-theme', theme);
+    },
+    applyTheme(theme) {
+      // 通过 data-theme 属性切换主题（CSS 中已定义各主题变量）
+      const writeEl = document.getElementById('write');
+      if (writeEl) {
+        writeEl.setAttribute('data-theme', theme);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-@import '../../../assets/fonts/font.css';
-
 .page-container {
   display: flex;
   width: 100%;
@@ -249,10 +347,17 @@ export default {
 /* 底部上下条按钮 */
 .content-nav {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+/* 备案信息 */
+.footer-beian {
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
 }
 
 .nav-btn {
@@ -260,6 +365,19 @@ export default {
   height: 44px;
   font-size: 15px;
   border-radius: 10px;
+}
+
+.word-count {
+  font-size: 12px;
+  color: #909399;
+  font-family: "JetBrains Mono", monospace;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.word-count-divider {
+  margin: 0 6px;
+  color: #dcdfe6;
 }
 
 /* 导航列表 */
@@ -335,20 +453,16 @@ export default {
 /* 内容区域 */
 .content {
   flex: 1;
-  padding: 10px 10px;
+  min-height: 0;
+  padding: 0;
   overflow-y: auto;
   background: #fff;
-  font-family: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 14px;
-  line-height: 1.8;
-  color: #333;
 }
 
 .content-header {
   text-align: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 16px;
-  margin-bottom: 20px;
+  padding: 10px 10px;
+  margin-bottom: 0;
 }
 
 .content-title {
@@ -363,7 +477,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
   margin-top: 10px;
 }
 
@@ -381,15 +494,71 @@ export default {
   color: #764ba2;
 }
 
+/* 主题选择器 */
+.theme-selector {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.theme-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.2s;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.6);
+}
+
+.theme-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 字数统计 */
+.word-count {
+  font-size: 12px;
+  color: #909399;
+  font-family: "JetBrains Mono", monospace;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.word-count-divider {
+  margin: 0 6px;
+  color: #dcdfe6;
+}
+
+/* 下拉菜单选中态 */
+:deep(.el-dropdown-menu__item.is-active) {
+  color: #667eea;
+  font-weight: 600;
+}
+
 /* 响应式 */
 @media screen and (min-width: 700px) and (max-width: 810px) {
   .sidebar {
     width: 200px;
     min-width: 200px;
-  }
-
-  .content {
-    padding: 10px 10px;
   }
 
   .content-title {
@@ -422,10 +591,6 @@ export default {
     font-size: 11px;
   }
 
-  .content {
-    padding: 20px 16px;
-  }
-
   .content-title {
     font-size: 20px;
     margin-bottom: 20px;
@@ -439,9 +604,4 @@ export default {
     border-radius: 10px;
   }
 }
-</style>
-
-<style>
-@import '../../../assets/fonts/font.css';
-@import '../../../assets/styles/md-preview.css';
 </style>

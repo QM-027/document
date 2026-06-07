@@ -1,0 +1,318 @@
+/* Drake 主题 - Web 预览适配
+   专门为 #write 容器和标准 HTML 元素设计 */
+
+/* ===== 字体 ===== */
+@import url(./font.css);
+
+/* ===== #write 容器 ===== */
+#write {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 40px 100px;
+  font-family: var(--text-font, "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif);
+  font-size: var(--text-size, 14px);
+  line-height: var(--text-line-height, 1.8);
+  color: var(--text-color, #333);
+  word-wrap: break-word;
+}
+
+/* ===== 段落 ===== */
+#write p {
+  margin: var(--p-spacing, 0.8rem) 0;
+  line-height: var(--text-line-height, 1.8);
+}
+
+/* ===== 标题 ===== */
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+  font-family: var(--title-font, "JetBrains Mono", "PingFang SC", "Microsoft YaHei", sans-serif);
+  color: var(--title-color, #273849);
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+#write h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 0;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--table-border-color, #dfe2e5);
+}
+
+#write h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--h2-underline-color, var(--title-color, #273849));
+}
+
+#write h3 { font-size: 1.4rem; }
+#write h4 { font-size: 1.2rem; }
+#write h5 { font-size: 1rem; }
+#write h6 { font-size: 1rem; }
+
+/* ===== 链接 ===== */
+#write a {
+  color: var(--a-color, var(--drake-highlight, #d63200));
+  text-decoration: none;
+}
+
+#write a:hover {
+  text-decoration: underline;
+}
+
+/* ===== 强调 ===== */
+#write strong {
+  color: var(--strong-color, var(--title-color, #273849));
+  font-weight: bold;
+}
+
+#write blockquote strong {
+  color: var(--blockquote-color, var(--text-color, #333));
+}
+
+#write em {
+  padding: 0 5px 0 2px;
+}
+
+/* ===== 引用块 ===== */
+#write blockquote {
+  color: var(--blockquote-color, var(--text-color, #333));
+  background-color: var(--blockquote-bg-color, #fdefee);
+  border-radius: 2px;
+  padding: 10px 16px;
+  margin: var(--p-spacing, 0.8rem) 0;
+  position: relative;
+  border-left: none;
+}
+
+#write blockquote::before {
+  display: block;
+  position: absolute;
+  content: '';
+  width: 4px;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: var(--blockquote-border-color, var(--drake-accent, #e95f59));
+  border-radius: 2px;
+}
+
+#write blockquote p {
+  margin: 0;
+}
+
+/* ===== 代码块 ===== */
+#write .md-fences {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.9em;
+  padding: 1em 1.2em;
+  border-radius: 2px;
+  word-wrap: normal;
+  background-color: var(--code-block-bg-color, #2b2b2b);
+  color: var(--code-block-color, #A9B7C6);
+  border: none;
+  line-height: var(--code-line-height, 1.6);
+  margin: var(--p-spacing, 0.8rem) 0;
+  overflow-x: auto;
+}
+
+#write .md-fences code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ===== 内联代码 ===== */
+#write code {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  color: var(--drake-highlight, #d63200);
+  margin: 0 2px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  background-color: rgba(27, 31, 35, 0.05);
+}
+
+#write .md-fences code {
+  color: inherit;
+  background: transparent;
+  padding: 0;
+}
+
+/* ===== 列表 ===== */
+#write ul,
+#write ol {
+  padding-inline-start: 2em;
+  margin: var(--p-spacing, 0.8rem) 0;
+}
+
+#write li {
+  margin: 0.5em 0;
+}
+
+#write li > ul,
+#write li > ol {
+  margin: 0;
+}
+
+/* 任务列表 */
+#write .md-task-list-item {
+  list-style: none;
+  position: relative;
+}
+
+#write .md-task-list-item > input {
+  margin-left: -1.3em;
+  margin-right: 0.5em;
+}
+
+/* ===== 表格 ===== */
+#write table {
+  margin: var(--p-spacing, 0.8rem) 0;
+  word-break: initial;
+  background-color: var(--table-bg-color, #fff);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#write table tr {
+  border-top: 0.1em solid var(--table-border-color, #dfe2e5);
+  margin: 0;
+  padding: 0;
+}
+
+#write table th {
+  font-weight: bold;
+  border: 0.1em solid var(--table-border-color, #dfe2e5);
+  border-bottom: 0;
+  margin: 0;
+  padding: 6px 13px;
+  background-color: var(--table-header-bg-color, #f8f8f8);
+}
+
+#write table td {
+  border: 0.1em solid var(--table-border-color, #dfe2e5);
+  margin: 0;
+  padding: 6px 13px;
+}
+
+#write table thead {
+  background-color: var(--table-header-bg-color, #f8f8f8);
+}
+
+#write table tr:nth-child(2n) {
+  background-color: var(--table-n2-bg-color, #f8f8f8);
+}
+
+/* ===== 分割线 ===== */
+#write hr {
+  height: 2px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: var(--horizontal-divider-color, var(--title-color, #273849));
+  border: 0 none;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
+/* ===== 图片 ===== */
+#write img {
+  border-left: none;
+  border-right: none;
+  vertical-align: baseline;
+  border-radius: 2px;
+  max-width: 100%;
+}
+
+#write .md-image {
+  display: inline-block;
+}
+
+/* ===== 高亮标记 ===== */
+#write mark {
+  border: 0.1em solid var(--height-light-border-color, var(--drake-highlight, #d63200));
+  color: var(--height-light-color, var(--drake-highlight, #d63200));
+  background-color: transparent;
+  padding: 0.1rem 0.5rem;
+  border-radius: 2rem;
+  margin: 0 0.2rem;
+  font-size: 0.95rem;
+}
+
+/* ===== 键盘快捷键 ===== */
+#write kbd {
+  border: 0.1em solid #5b5b5e;
+  background: transparent;
+  color: var(--text-color, #333);
+  margin: 0 0.4rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.95rem;
+  padding: 0.3em 0.4em;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em 0.2em rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 删除线 ===== */
+#write del {
+  padding: 1px 2px;
+}
+
+/* ===== 脚注 ===== */
+#write sup {
+  color: var(--drake-highlight, #d63200);
+  font-size: 0.8em;
+}
+
+/* ===== Prism.js 语法高亮 - IntelliJ Darcula ===== */
+.md-fences .token.comment,
+.md-fences .token.prolog,
+.md-fences .token.doctype,
+.md-fences .token.cdata { color: #787878; }
+
+.md-fences .token.punctuation { color: #A9B7C6; }
+
+.md-fences .token.property,
+.md-fences .token.tag,
+.md-fences .token.boolean,
+.md-fences .token.number,
+.md-fences .token.constant,
+.md-fences .token.symbol,
+.md-fences .token.deleted { color: #6897BB; }
+
+.md-fences .token.selector,
+.md-fences .token.attr-name,
+.md-fences .token.string,
+.md-fences .token.char,
+.md-fences .token.builtin,
+.md-fences .token.inserted { color: #6A8759; }
+
+.md-fences .token.operator,
+.md-fences .token.entity,
+.md-fences .token.url { color: #A9B7C6; }
+
+.md-fences .token.atrule,
+.md-fences .token.attr-value,
+.md-fences .token.keyword { color: #CC7832; }
+
+.md-fences .token.function,
+.md-fences .token.class-name { color: #FFD760; }
+
+.md-fences .token.regex,
+.md-fences .token.important,
+.md-fences .token.variable { color: #9876AA; }
+
+.md-fences .token.important,
+.md-fences .token.bold { font-weight: bold; }
+
+.md-fences .token.italic { font-style: italic; }

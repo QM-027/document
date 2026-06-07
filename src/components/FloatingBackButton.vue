@@ -38,8 +38,8 @@ export default {
   mounted() {
     // 初始化位置：右下角
     this.position = {
-      x: window.innerWidth - 50,
-      y: window.innerHeight - 150
+      x: window.innerWidth - 65,
+      y: window.innerHeight - 300
     }
 
     // 监听窗口大小变化

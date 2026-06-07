@@ -1,0 +1,333 @@
+/*
+ * Drake 主题 - Web 预览版
+ * 自包含：字体声明 + 主题变量 + 全部排版样式 + Prism 语法高亮
+ * 通过修改 [data-theme] 属性切换主题
+ */
+
+/* ===== JetBrains Mono 字体 ===== */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono'), url('/drake/JetBrainsMono-Regular.woff2') format('woff2');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono'), url('/drake/JetBrainsMono-Bold.woff2') format('woff2');
+  font-display: swap;
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono'), url('/drake/JetBrainsMono-Italic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: local('JetBrains Mono'), url('/drake/JetBrainsMono-BoldItalic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* ===== 主题变量 (默认: drake) ===== */
+#write {
+  --drake-accent: #e95f59;
+  --drake-highlight: #d63200;
+  --text-color: #333;
+  --bg-color: #fff;
+  --title-color: #273849;
+  --strong-color: #273849;
+  --a-color: #d63200;
+  --blockquote-color: #333;
+  --blockquote-bg: #fdefee;
+  --blockquote-border: #e95f59;
+  --code-bg: #2b2b2b;
+  --code-color: #A9B7C6;
+  --table-border: #dfe2e5;
+  --table-header-bg: #f8f8f8;
+  --table-stripe-bg: #f8f8f8;
+  --hr-color: #273849;
+  --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  --sans: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+}
+
+/* 各主题变量覆盖 */
+#write[data-theme="drake-ayu"] {
+  --drake-accent: #f07178; --drake-highlight: #f07178; --text-color: #8a9199;
+  --title-color: #5c6773; --strong-color: #5c6773; --a-color: #f07178;
+  --blockquote-color: #8a9199; --blockquote-bg: rgba(240,113,120,0.08); --blockquote-border: #f07178;
+  --code-bg: #1e2027; --code-color: #bfbdb6; --bg-color: #fafafa;
+  --table-border: #e8e8e8; --table-header-bg: #f5f5f5; --table-stripe-bg: #f5f5f5;
+  --hr-color: #5c6773;
+}
+#write[data-theme="drake-black"] {
+  --drake-accent: #6ca0dc; --drake-highlight: #6ca0dc; --text-color: #9ba4b0;
+  --title-color: #c5cdd8; --strong-color: #c5cdd8; --a-color: #6ca0dc;
+  --blockquote-color: #9ba4b0; --blockquote-bg: rgba(108,160,220,0.08); --blockquote-border: #6ca0dc;
+  --code-bg: #1a1c23; --code-color: #bfbdb6; --bg-color: #1a1c23;
+  --table-border: #2e323c; --table-header-bg: #22252d; --table-stripe-bg: #1e2129;
+  --hr-color: #444b58;
+}
+#write[data-theme="drake-dark"] {
+  --drake-accent: #3473b0; --drake-highlight: #58a1d6; --text-color: #acb7c4;
+  --title-color: #bbc9d7; --strong-color: #bbc9d7; --a-color: #58a1d6;
+  --blockquote-color: #acb7c4; --blockquote-bg: rgba(52,115,176,0.1); --blockquote-border: #3473b0;
+  --code-bg: #222222; --code-color: #A9B7C6; --bg-color: #2b2b2b;
+  --table-border: #383838; --table-header-bg: #222222; --table-stripe-bg: #222222;
+  --hr-color: #444;
+}
+#write[data-theme="drake-google"] {
+  --drake-accent: #4285f4; --drake-highlight: #4285f4; --text-color: #5f6368;
+  --title-color: #202124; --strong-color: #202124; --a-color: #4285f4;
+  --blockquote-color: #5f6368; --blockquote-bg: rgba(66,133,244,0.06); --blockquote-border: #4285f4;
+  --code-bg: #f8f9fa; --code-color: #37474f; --bg-color: #fff;
+  --table-border: #dadce0; --table-header-bg: #f8f9fa; --table-stripe-bg: #f8f9fa;
+  --hr-color: #dadce0;
+}
+#write[data-theme="drake-jb"] {
+  --drake-accent: #667eea; --drake-highlight: #667eea; --text-color: #4a5568;
+  --title-color: #1a202c; --strong-color: #1a202c; --a-color: #667eea;
+  --blockquote-color: #4a5568; --blockquote-bg: rgba(102,126,234,0.06); --blockquote-border: #667eea;
+  --code-bg: #282c34; --code-color: #abb2bf; --bg-color: #fff;
+  --table-border: #e2e8f0; --table-header-bg: #f7fafc; --table-stripe-bg: #f7fafc;
+  --hr-color: #e2e8f0;
+}
+#write[data-theme="drake-juejin"] {
+  --drake-accent: #1e80ff; --drake-highlight: #1e80ff; --text-color: #515767;
+  --title-color: #252933; --strong-color: #252933; --a-color: #1e80ff;
+  --blockquote-color: #515767; --blockquote-bg: rgba(30,128,255,0.06); --blockquote-border: #1e80ff;
+  --code-bg: #f6f8fa; --code-color: #476582; --bg-color: #fff;
+  --table-border: #e4e6eb; --table-header-bg: #f7f8fa; --table-stripe-bg: #f7f8fa;
+  --hr-color: #e4e6eb;
+}
+#write[data-theme="drake-light"] {
+  --drake-accent: #4b83f0; --drake-highlight: #4b83f0; --text-color: #5a6169;
+  --title-color: #2c3137; --strong-color: #2c3137; --a-color: #4b83f0;
+  --blockquote-color: #5a6169; --blockquote-bg: rgba(75,131,240,0.06); --blockquote-border: #4b83f0;
+  --code-bg: #f5f7fa; --code-color: #476582; --bg-color: #fff;
+  --table-border: #e8ecf1; --table-header-bg: #f5f7fa; --table-stripe-bg: #f5f7fa;
+  --hr-color: #e8ecf1;
+}
+#write[data-theme="drake-material"] {
+  --drake-accent: #e91e63; --drake-highlight: #e91e63; --text-color: #616161;
+  --title-color: #212121; --strong-color: #212121; --a-color: #e91e63;
+  --blockquote-color: #616161; --blockquote-bg: rgba(233,30,99,0.05); --blockquote-border: #e91e63;
+  --code-bg: #263238; --code-color: #eeffff; --bg-color: #fff;
+  --table-border: #e0e0e0; --table-header-bg: #fafafa; --table-stripe-bg: #fafafa;
+  --hr-color: #e0e0e0;
+}
+#write[data-theme="drake-purple"] {
+  --drake-accent: #9c27b0; --drake-highlight: #9c27b0; --text-color: #616161;
+  --title-color: #212121; --strong-color: #212121; --a-color: #9c27b0;
+  --blockquote-color: #616161; --blockquote-bg: rgba(156,39,176,0.05); --blockquote-border: #9c27b0;
+  --code-bg: #2d2b55; --code-color: #b8b8d4; --bg-color: #fff;
+  --table-border: #e0e0e0; --table-header-bg: #fafafa; --table-stripe-bg: #fafafa;
+  --hr-color: #e0e0e0;
+}
+#write[data-theme="drake-vue"] {
+  --drake-accent: #42b883; --drake-highlight: #42b883; --text-color: #5a6a7a;
+  --title-color: #2c3e50; --strong-color: #2c3e50; --a-color: #42b883;
+  --blockquote-color: #5a6a7a; --blockquote-bg: rgba(66,184,131,0.06); --blockquote-border: #42b883;
+  --code-bg: #282c34; --code-color: #abb2bf; --bg-color: #fff;
+  --table-border: #e8ecf1; --table-header-bg: #f7f9fc; --table-stripe-bg: #f7f9fc;
+  --hr-color: #e8ecf1;
+}
+#write[data-theme="drake-vue3"] {
+  --drake-accent: #42d392; --drake-highlight: #42d392; --text-color: #5a6a7a;
+  --title-color: #213547; --strong-color: #213547; --a-color: #42d392;
+  --blockquote-color: #5a6a7a; --blockquote-bg: rgba(66,211,146,0.06); --blockquote-border: #42d392;
+  --code-bg: #1b1b1f; --code-color: #bfc6d0; --bg-color: #fff;
+  --table-border: #e8ecf1; --table-header-bg: #f7f9fc; --table-stripe-bg: #f7f9fc;
+  --hr-color: #e8ecf1;
+}
+/* 暗色主题需要反转页面背景 */
+#write[data-theme="drake-black"],
+#write[data-theme="drake-dark"] {
+  --bg-color: #2b2b2b;
+}
+
+/* ===== #write 容器 ===== */
+#write {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 40px 100px;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-color);
+  word-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 段落 ===== */
+#write p { margin: 0.8rem 0; line-height: 1.8; }
+
+/* ===== 标题 ===== */
+#write h1, #write h2, #write h3,
+#write h4, #write h5, #write h6 {
+  font-family: var(--sans);
+  color: var(--title-color);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+}
+#write h1 { font-size: 2rem; text-align: center; margin-top: 0; padding-bottom: 0.3em; border-bottom: 2px solid var(--table-border); }
+#write h2 { font-size: 1.65rem; margin-bottom: 1.5rem; padding-bottom: 0.3em; border-bottom: 2px solid var(--title-color); }
+#write h3 { font-size: 1.35rem; }
+#write h4 { font-size: 1.2rem; }
+#write h5, #write h6 { font-size: 1rem; }
+
+/* ===== 链接 ===== */
+#write a { color: var(--a-color); text-decoration: none; }
+#write a:hover { text-decoration: underline; }
+
+/* ===== 强调 ===== */
+#write strong { color: var(--strong-color); font-weight: bold; }
+#write blockquote strong { color: var(--blockquote-color); }
+#write em { font-style: italic; padding: 0 3px 0 1px; }
+
+/* ===== 引用块 ===== */
+#write blockquote {
+  color: var(--blockquote-color);
+  background-color: var(--blockquote-bg);
+  border-radius: 2px;
+  padding: 10px 16px;
+  margin: 0.8rem 0;
+  position: relative;
+  border-left: none;
+}
+#write blockquote::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 4px; height: 100%;
+  background: var(--blockquote-border);
+  border-radius: 2px;
+}
+#write blockquote p { margin: 0; }
+
+/* ===== 代码块 ===== */
+#write .md-fences {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  padding: 1em 1.2em;
+  margin: 0.8rem 0;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--code-color);
+  line-height: 1.6;
+  border: none;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+#write .md-fences code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ===== 内联代码 ===== */
+#write :not(pre) > code {
+  font-family: var(--mono);
+  color: var(--drake-highlight);
+  background: rgba(27,31,35,0.05);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  margin: 0 2px;
+}
+
+/* ===== 列表 ===== */
+#write ul, #write ol { padding-left: 2em; margin: 0.8rem 0; }
+#write li { margin: 0.5em 0; }
+#write li > ul, #write li > ol { margin: 0; }
+#write .md-task-list-item { list-style: none; }
+#write .md-task-list-item > input { margin-right: 0.5em; }
+
+/* ===== 表格 ===== */
+#write table { border-collapse: collapse; width: 100%; margin: 0.8rem 0; background: var(--bg-color); }
+#write table tr { border-top: 1px solid var(--table-border); }
+#write table th { font-weight: bold; border: 1px solid var(--table-border); border-bottom: 0; padding: 6px 13px; background: var(--table-header-bg); text-align: left; }
+#write table td { border: 1px solid var(--table-border); padding: 6px 13px; }
+#write table thead { background: var(--table-header-bg); }
+#write table tr:nth-child(2n) { background: var(--table-stripe-bg); }
+
+/* ===== 分割线 ===== */
+#write hr { height: 2px; margin: 1.5em 0; background: var(--hr-color); border: none; }
+
+/* ===== 图片 ===== */
+#write img { max-width: 100%; border-radius: 2px; vertical-align: baseline; }
+
+/* ===== 高亮 ===== */
+#write mark {
+  color: var(--drake-highlight);
+  background: transparent;
+  border: 1px solid var(--drake-highlight);
+  border-radius: 2rem;
+  padding: 0.1rem 0.5rem;
+  margin: 0 0.2rem;
+  font-size: 0.95em;
+}
+
+/* ===== 键盘 ===== */
+#write kbd {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid #5b5b5e;
+  border-radius: 0.4em;
+  padding: 0.2em 0.4em;
+  margin: 0 0.3em;
+  box-shadow: 0.1em 0.1em 0.2em rgba(0,0,0,0.2);
+}
+
+/* ===== 删除线 ===== */
+#write del { text-decoration: line-through; }
+
+/* ===== 脚注 ===== */
+#write sup { color: var(--drake-highlight); font-size: 0.8em; }
+#write sub { font-size: 0.8em; }
+
+/* ===== Prism.js 语法高亮 — IntelliJ Darcula ===== */
+.md-fences .token.comment,
+.md-fences .token.prolog,
+.md-fences .token.doctype,
+.md-fences .token.cdata { color: #787878; }
+.md-fences .token.punctuation { color: #A9B7C6; }
+.md-fences .token.property,
+.md-fences .token.tag,
+.md-fences .token.boolean,
+.md-fences .token.number,
+.md-fences .token.constant,
+.md-fences .token.symbol,
+.md-fences .token.deleted { color: #6897BB; }
+.md-fences .token.selector,
+.md-fences .token.attr-name,
+.md-fences .token.string,
+.md-fences .token.char,
+.md-fences .token.builtin,
+.md-fences .token.inserted { color: #6A8759; }
+.md-fences .token.operator,
+.md-fences .token.entity,
+.md-fences .token.url { color: #A9B7C6; }
+.md-fences .token.atrule,
+.md-fences .token.attr-value,
+.md-fences .token.keyword { color: #CC7832; }
+.md-fences .token.function,
+.md-fences .token.class-name { color: #FFD760; }
+.md-fences .token.regex,
+.md-fences .token.important,
+.md-fences .token.variable { color: #9876AA; }
+.md-fences .token.important,
+.md-fences .token.bold { font-weight: bold; }
+.md-fences .token.italic { font-style: italic; }

@@ -167,7 +167,7 @@ export default {
             .then(() => this.$message.success("保存成功"))
             .catch(() => this.$message.error("保存失败"))
             .finally(() => {
-              this.handleOpen();
+              this.handleClose();
               this.loading = false;
             });
         }).catch(err => {

@@ -1,5 +1,5 @@
 <template>
-  <div id="write" v-html="renderedHtml"></div>
+  <div id="write" class="v-md-preview" v-html="renderedHtml"></div>
 </template>
 
 <script>
