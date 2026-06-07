@@ -126,9 +126,9 @@ export default {
       this.resetInfo();
       this.fetchCategoryList();
 
-
       const itemStore = useItemStore()
-      const item = itemStore.currentItem
+      // 深拷贝 item，避免直接引用 store 中的对象
+      const item = itemStore.currentItem ? JSON.parse(JSON.stringify(itemStore.currentItem)) : null
       if (item && item.id) {
         this.form = {
           id: item.id,
@@ -144,6 +144,8 @@ export default {
           this.$refs.formRef.resetFields();
         });
       }
+      // 表单赋值完成后清空 store
+      itemStore.setItem(null)
     },
     fetchCategoryList() {
       getDocument().then(res => {
